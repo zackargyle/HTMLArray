@@ -1,8 +1,10 @@
 'use strict';
 
-function X (id, array, options) {
+function Xenon (id, array, options) {
 
 	/* POSSIBLE OPTIONS
+		- filtering
+		- sorting
 		- limitTo
 		- startFrom
 		- paging
@@ -76,8 +78,8 @@ function X (id, array, options) {
 	if (array) this.update(array);
 }
 
-(function() {
-	var array = [{test1:"Test1.1", test2: "Test1.2"},{test1:"Test2.1", test2:"Test2.2"}];
-	var test = new X("repeat", array);
-	test.push({test1:"Test3.1", test2:"Test3.2"});
-})();
+// (function() {
+// 	var array = [{test1:"Test1.1", test2: "Test1.2"},{test1:"Test2.1", test2:"Test2.2"}];
+// 	var test = new X("repeat", array);
+// 	test.push({test1:"Test3.1", test2:"Test3.2"});
+// })();
