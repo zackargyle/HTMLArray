@@ -22,7 +22,9 @@
         var obj2 = {test1:"Test 2.1", test2:"Test 2.2"};
 
         var x = new Xenon("repeat");
-        x.set(data).push(obj8).splice(2,0, obj2).slice(1).move(2,0);
+        setTimeout(function() {
+            x.set(data).push(obj8).splice(2,0, obj2).slice(1).move(2,0);
+        }, 1500);
     </script>
   </body>
 </html>
