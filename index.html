@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html>
-
-  <head></head> 
-
+<html><head></head> 
   <body>
-    
     <div id="repeat">
-        <div x-value="test1"></div>
-        <input x-value="test2"></input>
+        <div x-value="test1"> -
+            <span x-value="test2"></span>
+        </div>
     </div>
-        
-
     <script src="xenon.js"></script>
-  </body>
+    <script>
+        var data = [
+            {test1:"Test 9.1", test2:"Test 9.2"},
+            {test1:"Test 1.1", test2:"Test 1.2"},
+            {test1:"Test 0.1", test2:"Test 0.2"},
+            {test1:"Test 3.1", test2:"Test 3.2"},
+            {test1:"Test 4.1", test2:"Test 4.2"},
+            {test1:"Test 5.1", test2:"Test 5.2"},
+            {test1:"Test 6.1", test2:"Test 6.2"},
+            {test1:"Test 7.1", test2:"Test 7.2"}
+        ];
+        var obj8 = {test1:"Test 8.1", test2:"Test 8.2"};
+        var obj2 = {test1:"Test 2.1", test2:"Test 2.2"};
 
+        var x = new Xenon("repeat");
+        x.set(data).push(obj8).splice(2,0, obj2).slice(1).move(2,0);
+    </script>
+  </body>
 </html>
