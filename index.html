@@ -1,33 +1,54 @@
 <!DOCTYPE html>
 <html><head></head> 
   <body>
+    <input id="firstName" placeholder="First name"><br>
+    <input id="lastName" placeholder="Last name"><br>
+    <button id="add">Push</button><br>
+    <input id="index">Index</button><br>
+    <button id="splice">Splice</button><br>
+    <input id="from" placeholder="from"><br>
+    <input id="to" placeholder="to"><br>
+    <button id="slice">Slice</button>
+    <button id="move">Move</button><br>
+    <button id="clear">Clear</button><br>
+
     <div id="repeat">
-        <div x-value="test1"> -
-            <span x-value="test2"></span>
+        <div x-value="lastName"> -
+            <span x-value="firstName"></span>
         </div>
     </div>
     <script src="xenon.js"></script>
     <script>
-    
-        var data = [
-            {test1:"Test 9.1", test2:"Test 9.2"},
-            {test1:"Test 1.1", test2:"Test 1.2"},
-            {test1:"Test 0.1", test2:"Test 0.2"},
-            {test1:"Test 3.1", test2:"Test 3.2"},
-            {test1:"Test 4.1", test2:"Test 4.2"},
-            {test1:"Test 5.1", test2:"Test 5.2"},
-            {test1:"Test 6.1", test2:"Test 6.2"},
-            {test1:"Test 7.1", test2:"Test 7.2"}
-        ];
-        var obj8 = {test1:"Test 8.1", test2:"Test 8.2"};
-        var obj2 = {test1:"Test 2.1", test2:"Test 2.2"};
-
+    (function() {
+        var firstName = document.getElementById("firstName");
+        var lastName = document.getElementById("lastName");
         var x = new Xenon("repeat");
-        x.set(data)
-
-        setTimeout(function() {
-            x.push(obj8).splice(2,0, obj2).slice(1).move(2,0);
-        }, 1500);
+        document.getElementById("add").onclick = function() {
+            x.push({
+                firstName:firstName.value,
+                lastName:lastName.value
+            });
+        }
+        var index = document.getElementById("index");
+        document.getElementById("splice").onclick = function() {
+            x.splice(index.value, 0, {
+                firstName:firstName.value,
+                lastName:lastName.value
+            });
+        }
+        var from = document.getElementById("from");
+        var to = document.getElementById("to");
+        document.getElementById("slice").onclick = function() {
+            x.slice(from.value, to.value);
+        }
+        document.getElementById("clear").onclick = function() {
+            x.clear();
+        }
+        document.getElementById("move").onclick = function() {
+            x.move(from.value, to.value);
+        }
+    })();
+        
 
     </script>
   </body>
