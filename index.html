@@ -8,6 +8,7 @@
     </div>
     <script src="xenon.js"></script>
     <script>
+    
         var data = [
             {test1:"Test 9.1", test2:"Test 9.2"},
             {test1:"Test 1.1", test2:"Test 1.2"},
@@ -22,9 +23,12 @@
         var obj2 = {test1:"Test 2.1", test2:"Test 2.2"};
 
         var x = new Xenon("repeat");
+        x.set(data)
+
         setTimeout(function() {
-            x.set(data).push(obj8).splice(2,0, obj2).slice(1).move(2,0);
+            x.push(obj8).splice(2,0, obj2).slice(1).move(2,0);
         }, 1500);
+
     </script>
   </body>
 </html>
