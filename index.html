@@ -1,74 +1,56 @@
 <!DOCTYPE html>
-<html><head></head> 
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="index.css">
+    </head> 
   <body>
-    <div style="width:50%; float:left">
-        <input id="firstName" placeholder="First name"><br>
-        <input id="lastName" placeholder="Last name"><br>
+    <div id="container">
+        <input id="firstName" placeholder="First name">
+        <input id="lastName" placeholder="Last name">
         <button id="add">Push</button><br>
-        <input id="index">Index</button><br>
+        <input id="index" placeholder="Index"></button>
         <button id="splice">Splice</button><br>
-        <input id="from" placeholder="from"><br>
-        <input id="to" placeholder="to"><br>
+        <input id="from" placeholder="From">
+        <input id="to" placeholder="To">
         <button id="slice">Slice</button>
         <button id="move">Move</button><br>
-        <button id="clear">Clear</button><br>
+        <button id="clear">Clear</button>
+        <button id="prev">Prev Page</button>
+        <button id="next">Next Page</button><br>
 
-        <div id="repeat">
-            <div x-value="lastName"> -
-                <span x-value="firstName"></span>
+        <div id="dataContainer">
+            <div id="repeat" class="data">
+                <div x-value="lastName"> -
+                    <span x-value="firstName"></span>
+                </div>
             </div>
         </div>
     </div>
-    <div style="width: 50%; float:left">
-        &lt;div id="repeat"&gt;<br />
-            &nbsp&nbsp&nbsp&nbsp&lt;div x-value="lastName"&gt; -<br />
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&lt;span x-value="firstName"&gt;&lt;/span&gt;<br />
-            &nbsp&nbsp&nbsp&nbsp&lt;/div&gt;<br />
-        &lt;/div&gt;
-        <pre><code>
-        (function() {
-            var firstName = document.getElementById("firstName");
-            var lastName = document.getElementById("lastName");
-            var x = new Xenon("repeat");
-            document.getElementById("add").onclick = function() {
-                x.push({
-                    firstName:firstName.value,
-                    lastName:lastName.value
-                });
-            }
-            var index = document.getElementById("index");
-            document.getElementById("splice").onclick = function() {
-                x.splice(index.value, 0, {
-                    firstName:firstName.value,
-                    lastName:lastName.value
-                });
-            }
-            var from = document.getElementById("from");
-            var to = document.getElementById("to");
-            document.getElementById("slice").onclick = function() {
-                x.slice(from.value, to.value);
-            }
-            document.getElementById("clear").onclick = function() {
-                x.clear();
-            }
-            document.getElementById("move").onclick = function() {
-                x.move(from.value, to.value);
-            }
-        })();
 
-        </code></pre>
-    </div>
-    <script src="xenon.js"></script>
+    <script src="HTMLArray.js"></script>
     <script>
     (function() {
         var firstName = document.getElementById("firstName");
         var lastName = document.getElementById("lastName");
-        var x = new Xenon("repeat");
+        var data = [
+            {firstName: "Adam", lastName: "Argyle"},
+            {firstName: "Sierra", lastName: "Argyle"},
+            {firstName: "Zack", lastName: "Argyle"},
+            {firstName: "Hillary", lastName: "Argyle"},
+            {firstName: "Alex", lastName: "Argyle"},
+            {firstName: "Jackie", lastName: "Argyle"},
+            {firstName: "Lori", lastName: "Argyle"},
+            {firstName: "Tom", lastName: "Argyle"}
+        ];
+        var x = new HTMLArray("repeat", data);
+        x.initPagination(5, 0, true);
         document.getElementById("add").onclick = function() {
             x.push({
                 firstName:firstName.value,
                 lastName:lastName.value
             });
+            refreshPaging();
+
         }
         var index = document.getElementById("index");
         document.getElementById("splice").onclick = function() {
@@ -76,18 +58,38 @@
                 firstName:firstName.value,
                 lastName:lastName.value
             });
+            refreshPaging();
         }
         var from = document.getElementById("from");
         var to = document.getElementById("to");
         document.getElementById("slice").onclick = function() {
             x.slice(from.value, to.value);
+            refreshPaging();
         }
         document.getElementById("clear").onclick = function() {
             x.clear();
+            refreshPaging();
         }
         document.getElementById("move").onclick = function() {
             x.move(from.value, to.value);
         }
+
+        var next = document.getElementById("next");
+        next.onclick = function() {
+            x.nextPage();
+            refreshPaging();
+        }
+        var prev = document.getElementById("prev");
+        prev.onclick = function() {
+            x.prevPage();
+            refreshPaging();
+        }
+
+        function refreshPaging() {
+            prev.className = x.isFirstPage() ? "disabled" : "";
+            next.className = x.isLastPage()  ? "disabled" : "";
+        }
+        refreshPaging();
     })();
         
 
