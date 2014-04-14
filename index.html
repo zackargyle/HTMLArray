@@ -8,20 +8,19 @@
         <input id="firstName" placeholder="First name">
         <input id="lastName" placeholder="Last name">
         <button id="add">Push</button><br>
-        <input id="index" placeholder="Index"></button>
+        <input id="index" placeholder="Index">
+        <input id="howMany" placeholder="How many">
         <button id="splice">Splice</button><br>
         <input id="from" placeholder="From">
         <input id="to" placeholder="To">
-        <button id="slice">Slice</button>
         <button id="move">Move</button><br>
-        <button id="clear">Clear</button>
         <button id="prev">Prev Page</button>
-        <button id="next">Next Page</button><br>
+        <button id="next">Next Page</button>
+        <button id="clear">Clear</button><br>
 
         <div id="dataContainer">
             <div id="repeat" class="data">
-                <div x-value="lastName"> -
-                    <span x-value="firstName"></span>
+                <div x-value="firstName"> <span x-value="lastName"></span>
                 </div>
             </div>
         </div>
@@ -30,20 +29,18 @@
     <script src="HTMLArray.js"></script>
     <script>
     (function() {
-        var firstName = document.getElementById("firstName");
-        var lastName = document.getElementById("lastName");
         var data = [
             {firstName: "Adam", lastName: "Argyle"},
             {firstName: "Sierra", lastName: "Argyle"},
             {firstName: "Zack", lastName: "Argyle"},
             {firstName: "Hillary", lastName: "Argyle"},
-            {firstName: "Alex", lastName: "Argyle"},
-            {firstName: "Jackie", lastName: "Argyle"},
-            {firstName: "Lori", lastName: "Argyle"},
-            {firstName: "Tom", lastName: "Argyle"}
+            {firstName: "Alex", lastName: "Argyle"}
         ];
-        var x = new HTMLArray("repeat", data);
+        var x = new HTMLArray("repeat");
         x.initPagination(5, 0, true);
+
+        var firstName = document.getElementById("firstName");
+        var lastName = document.getElementById("lastName");
         document.getElementById("add").onclick = function() {
             x.push({
                 firstName:firstName.value,
@@ -52,26 +49,26 @@
             refreshPaging();
 
         }
+
         var index = document.getElementById("index");
+        var howMany = document.getElementById("howMany");
         document.getElementById("splice").onclick = function() {
-            x.splice(index.value, 0, {
+            x.splice(index.value, howMany.value, {
                 firstName:firstName.value,
                 lastName:lastName.value
             });
             refreshPaging();
         }
+
         var from = document.getElementById("from");
         var to = document.getElementById("to");
-        document.getElementById("slice").onclick = function() {
-            x.slice(from.value, to.value);
-            refreshPaging();
+        document.getElementById("move").onclick = function() {
+            x.move(from.value, to.value);
         }
+
         document.getElementById("clear").onclick = function() {
             x.clear();
             refreshPaging();
-        }
-        document.getElementById("move").onclick = function() {
-            x.move(from.value, to.value);
         }
 
         var next = document.getElementById("next");
@@ -92,6 +89,18 @@
         refreshPaging();
     })();
         
+
+    </script>
+
+    <script>
+        window.onresize = (function() {
+            var container = document.getElementById("container");
+            return function() {
+                console.log("hey");
+                container.style.marginLeft = (window.innerWidth - container.offsetWidth) / 2 + 'px';
+            }
+        })();
+        window.onresize();
 
     </script>
   </body>
