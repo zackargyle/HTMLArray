@@ -144,6 +144,9 @@ function HTMLArray (id, data) {
 	}
 
 	this.clear = function() {
+		if (paginationEnabled) {
+			pageIndex = 0;
+		}
 		return this.set([]);
 	}
 
@@ -170,7 +173,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.selectPage = function(pageIndex_) {
+	this.setPageIndex = function(pageIndex_) {
 		if (pageIndex !== pageIndex_) {
 			showCurrentPage(false);
 			pageIndex = pageIndex_
@@ -198,11 +201,18 @@ function HTMLArray (id, data) {
 	}
 
 	this.isLastPage = function() {
-		return pageIndex === Math.ceil(data.length / pageSize) - 1;
+		if (data.length > 0)
+			return pageIndex === Math.ceil(data.length / pageSize) - 1;
+		else
+			return true;
 	}
 
 	this.isFirstPage = function() {
 		return pageIndex === 0;
+	}
+
+	this.getPageIndex = function() {
+		return pageIndex;
 	}
 
 	this.set(data || []);
