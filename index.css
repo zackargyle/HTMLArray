@@ -1,0 +1,55 @@
+* {
+    font-family: "Lucida Grande";
+    font-size: 13px;
+}
+
+#container {
+    width: 50%;
+    margin-left: 25%;
+    padding: 1%;
+    background-color: hsl(150,80%,60%);
+}
+
+input {
+    border: none;
+    padding: 1.8%;
+    width: 25%;
+}
+
+button {
+    border: none;
+    color: hsl(150,80%,30%);
+    background-color: white;
+    width: 20%;
+    padding: 2%;
+}
+
+button:hover {
+    background-color: hsl(150,80%,90%);
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: .7;
+}
+
+.disabled:hover {
+    background-color: white;
+    cursor: default;
+}
+
+#dataContainer {
+    padding-top: 1%;
+}
+
+.data {
+    background-color: hsl(150, 80%, 43%);
+    border-bottom: 1px solid hsl(150, 80%, 60%);
+    padding: 1%;
+    color: white;
+    font-weight: lighter;
+}
+
+.data:last-child {
+    border-bottom: none;
+}
