@@ -5,11 +5,11 @@ HTML/JS List Building Tool
 
 HTML Array Wrapper to seamlessly create repeated elements.
 
-First create a new object, passing in the id of an element you would like repeated. You can pass in an array as the second parameter. 
+First create a new object, passing in the id of an element you would like repeated. You can pass in an optional array as the second parameter. 
 
     var x = new Xenon('listView', data);
     
-Your HTML should contain some elements like this.
+Your HTML should contain some elements that will map to your object fields. 
 
     <div id="listView">
         <div x-class="class1" x-value="val1">
@@ -38,17 +38,34 @@ This will create 2 elements that look like this.
 
 This html list can now be manipulated like an array. Available are
 
+    x.set(array);
     x.push(obj);
     x.splice(index, num, object);
     x.slice(from, to);
+    x.concat(array);
     x.move(from, to);
     x.clear();
-    var array = x.data();
+    var obj = x.get(index);
+    var array = x.getAll();
     
-All but clear() are chainable.
+All but get() and geAll() are chainable.
 
     x.push(obj).slice(2).move(4,1);
+
+There is also built in pagination available. This can be used by calling initPagination(). Default values are: page size of 10, start page of 0, and no refresh (this boolean determines weather the DOM should be updated).
+
+    x.initPagination(pageSize, pageIndex, refresh);
+
+The other pagination methods are:
+
+    x.setPageSize(size);
+    x.setPageIndex(index);
+    x.getPageIndex();
+    x.nextPage();
+    x.prevPage();
+    x.isLastPage();
+    x.isFirstPage();
     
-The HTML available attributes are
+The available HTML attributes are:
 
     x-value, x-class, x-href, x-src
