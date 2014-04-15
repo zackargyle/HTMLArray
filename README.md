@@ -7,7 +7,7 @@ HTML Array Wrapper to seamlessly create repeated elements.
 
 First create a new object, passing in the id of an element you would like repeated. You can pass in an optional array as the second parameter. 
 
-    var x = new Xenon('listView', data);
+    var x = new HTMLArray('listView', data);
     
 Your HTML should contain some elements that will map to your object fields. 
 
