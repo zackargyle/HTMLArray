@@ -28,15 +28,25 @@
 
     <script src="HTMLArray.js"></script>
     <script>
+        window.onresize = (function() {
+            var container = document.getElementById("container");
+            return function() {
+                container.style.marginLeft = (window.innerWidth - container.offsetWidth) / 2 + 'px';
+            }
+        })();
+        window.onresize();
+
+    </script>
+    <script>
     (function() {
         var data = [
             {firstName: "Adam", lastName: "Argyle"},
             {firstName: "Sierra", lastName: "Argyle"},
+            {firstName: "Nexus", lastName: "Argyle"},
             {firstName: "Zack", lastName: "Argyle"},
-            {firstName: "Hillary", lastName: "Argyle"},
-            {firstName: "Alex", lastName: "Argyle"}
+            {firstName: "Hillary", lastName: "Argyle"}
         ];
-        var x = new HTMLArray("repeat");
+        var x = new HTMLArray("repeat", data);
         x.initPagination(5, 0, true);
 
         var firstName = document.getElementById("firstName");
@@ -47,7 +57,6 @@
                 lastName:lastName.value
             });
             refreshPaging();
-
         }
 
         var index = document.getElementById("index");
@@ -89,18 +98,6 @@
         refreshPaging();
     })();
         
-
-    </script>
-
-    <script>
-        window.onresize = (function() {
-            var container = document.getElementById("container");
-            return function() {
-                console.log("hey");
-                container.style.marginLeft = (window.innerWidth - container.offsetWidth) / 2 + 'px';
-            }
-        })();
-        window.onresize();
 
     </script>
   </body>

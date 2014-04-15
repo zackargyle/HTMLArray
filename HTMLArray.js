@@ -1,5 +1,32 @@
 'use strict';
 
+/*
+
+** Array ***
+
+set
+push
+splice
+slice
+concat
+move
+clear
+get
+getAll
+
+*** PAGINATION ***
+
+initPagination
+setPageIndex
+setPageSize
+nextPage
+prevPage
+isLastPage
+isFirstPage
+getPageIndex
+
+*/
+
 function HTMLArray (id, data) {
 
 	var element = document.getElementById(id),
@@ -88,7 +115,15 @@ function HTMLArray (id, data) {
 		data = [];
 	}
 
+	function isArray(obj) {
+		return Object.prototype.toString.call(obj) === '[object Array]';
+	}
+
 	this.set = function(updatedData) {
+		if (!isArray(updatedData)) {
+			throw "HTMLArray.set requires an array";
+		}
+
 		removeAll();
 
 		for (var i = 0; i < updatedData.length; i++) {
@@ -99,12 +134,17 @@ function HTMLArray (id, data) {
 	}
 
 	this.push = function(obj) {
+		if (!obj) throw "HTMLArray.push requires an object.";
 		insertNode(obj);
 		refresh();
 		return this_;
 	}
 
 	this.splice = function(index, num, obj) {
+		index = parseInt(index), num = parseInt(num);
+		if (isNaN(index) || isNaN(num)) {
+			throw "HTMLArray.splice requires 2 paramters: index, num.";
+		}
 		while (--num >= 0) {
 			remove(index);
 		}
@@ -118,6 +158,10 @@ function HTMLArray (id, data) {
 	}
 
 	this.concat = function(array) {
+		if (!isArray(array)) {
+			throw "HTMLArray.concat requires an array";
+		}
+
 		for (var i = 0; i < array.length; i++) {
 			insertNode(array[i]);
 		}
@@ -127,6 +171,11 @@ function HTMLArray (id, data) {
 	}
 
 	this.move = function(from, to) {
+		from = parseInt(from), to = parseInt(to);
+		if (isNaN(from) || isNaN(to)) {
+			throw "HTMLArray.move requires 2 indexes: from, to.";
+		}
+
 		var obj = data[from],
 				node = nodes[from];
 
@@ -140,6 +189,10 @@ function HTMLArray (id, data) {
 	}
 
 	this.slice = function(begin, end) {
+		begin = parseInt(begin), end = parseInt(end);
+		if (isNaN(begin) || isNaN(end)) {
+			throw "HTMLArray.slice requires 2 indexes: begin, end.";
+		}
 		return this.set(data.slice(begin, end));
 	}
 
@@ -150,7 +203,14 @@ function HTMLArray (id, data) {
 		return this.set([]);
 	}
 
-	this.data = function() {
+	this.get = function(index) {
+		if (index === undefined) {
+			throw "HTMLArray.get requires an index";
+		}
+		return data[index];
+	}
+
+	this.getAll = function() {
 		return data;
 	}
 
@@ -166,8 +226,8 @@ function HTMLArray (id, data) {
 
 	this.initPagination = function(pageSize_, pageIndex_, refresh_) {
 		paginationEnabled = true;
-		pageIndex = pageIndex_;
-		pageSize = pageSize_;
+		pageIndex = pageIndex_ || 0;
+		pageSize = pageSize_ || 10;
 
 		if (refresh_) refresh();
 		return this_;
@@ -180,6 +240,16 @@ function HTMLArray (id, data) {
 			showCurrentPage(true);
 		}
 		return this_;
+	}
+
+	this.setPageSize = function(pageSize_) {
+		if (pageSize !== pageSize_) {
+			if (pageSize > pageSize_) {
+				showCurrentPage(false);
+			}
+			pageSize = pageSize_;
+			showCurrentPage(true);
+		}
 	}
 
 	this.nextPage = function() {
