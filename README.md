@@ -3,7 +3,7 @@ HTMLArray
 
 HTML/JS List Building Tool
 
-HTML Array Wrapper to seamlessly create repeated elements.
+HTML Array Wrapper to seamlessly create repeated elements. Works great in connection with http requests. For live examples, see http://zackargyle.github.io/HTMLArray and http://zackargyle.github.io/TwitchSearch
 
 First create a new object, passing in the id of an element you would like repeated. You can pass in an optional array as the second parameter. 
 
@@ -12,9 +12,8 @@ First create a new object, passing in the id of an element you would like repeat
 Your HTML should contain some elements that will map to your object fields. 
 
     <div id="listView">
-        <div x-class="class1" x-value="val1">
-            <div x-class="class2" x-value="val2"></div>
-        </div>
+        <div x-class="class1" x-value="val1"></div>
+        <div x-class="class2" x-value="val2"></div>
     </div>
     
 To build the list, use the 'set' method, it will remake the list with the new data.
@@ -23,7 +22,7 @@ To build the list, use the 'set' method, it will remake the list with the new da
       {class1: "c1", class2: "c2", val1: "Hello", val2: "World"},
       {class1: "c2", class2: "c1", val1: "World", val2: "Hello"}
     ];
-    x.set(array);
+    x.set(data);
     
 This will create 2 elements that look like this.
 
