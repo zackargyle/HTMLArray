@@ -20,23 +20,16 @@
 
         <div id="dataContainer">
             <div id="repeat" class="data">
-                <div x-value="firstName"> <span x-value="lastName"></span>
+                <div x-value="firstName"> 
+                    <span x-value="lastName"></span>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script src="HTMLArray.js"></script>
-    <script>
-        window.onresize = (function() {
-            var container = document.getElementById("container");
-            return function() {
-                container.style.marginLeft = (window.innerWidth - container.offsetWidth) / 2 + 'px';
-            }
-        })();
-        window.onresize();
 
-    </script>
     <script>
     (function() {
         var data = [
@@ -46,50 +39,53 @@
             {firstName: "Zack", lastName: "Argyle"},
             {firstName: "Hillary", lastName: "Argyle"}
         ];
+
+        var first = document.getElementById("firstName"),
+            last  = document.getElementById("lastName"),
+            index = document.getElementById("index"),
+            count = document.getElementById("howMany"),
+            from  = document.getElementById("from"),
+            to    = document.getElementById("to"),
+            next  = document.getElementById("next"),
+            prev  = document.getElementById("prev");
+
         var x = new HTMLArray("repeat", data);
         x.initPagination(5, 0, true);
 
-        var firstName = document.getElementById("firstName");
-        var lastName = document.getElementById("lastName");
-        document.getElementById("add").onclick = function() {
+        document.getElementById("add").addEventListener("click", function() {
             x.push({
-                firstName:firstName.value,
-                lastName:lastName.value
+                firstName:first.value,
+                lastName:last.value
             });
             refreshPaging();
-        }
+        });
 
-        var index = document.getElementById("index");
-        var howMany = document.getElementById("howMany");
-        document.getElementById("splice").onclick = function() {
-            x.splice(index.value, howMany.value, {
-                firstName:firstName.value,
-                lastName:lastName.value
+        document.getElementById("splice").addEventListener("click", function() {
+            x.splice(index.value, count.value, {
+                firstName:first.value,
+                lastName:last.value
             });
             refreshPaging();
-        }
+        });
 
-        var from = document.getElementById("from");
-        var to = document.getElementById("to");
-        document.getElementById("move").onclick = function() {
+        document.getElementById("move").addEventListener("click", function() {
             x.move(from.value, to.value);
-        }
+        });
 
-        document.getElementById("clear").onclick = function() {
+        document.getElementById("clear").addEventListener("click", function() {
             x.clear();
             refreshPaging();
-        }
+        });
 
-        var next = document.getElementById("next");
-        next.onclick = function() {
+        next.addEventListener("click", function() {
             x.nextPage();
             refreshPaging();
-        }
-        var prev = document.getElementById("prev");
-        prev.onclick = function() {
+        });
+
+        prev.addEventListener("click", function() {
             x.prevPage();
             refreshPaging();
-        }
+        });
 
         function refreshPaging() {
             prev.className = x.isFirstPage() ? "disabled" : "";
