@@ -49,11 +49,7 @@ function HTMLArray (id, data) {
 	function setupChild(node, obj) {
 		if (node.getAttribute("x-value")) {
 			var attr = node.getAttribute("x-value").split(".");
-			if (node.nodeName === "INPUT" && node.type === "text") {
-				node.value = getValue(obj, attr);
-			} else {
-				node.innerHTML = getValue(obj, attr) + node.innerHTML;
-			}
+			node.value = getValue(obj, attr);
 		}
 		if (node.getAttribute("x-class")) {
 			var attr = node.getAttribute("x-value").split(".");
@@ -67,6 +63,15 @@ function HTMLArray (id, data) {
 			var attr = node.getAttribute("x-src").split(".");
 			node.src = getValue(obj, attr);
 		}
+
+		// Match and Replace {{key}}
+		var matches = node.textContent.match(/{{\S*}}/g);
+		for (var i = 0; i < matches.length; i++) {
+			var str = matches[i].substr(2,matches[i].length-4);
+			var val = getValue(obj,str.split("."));
+			node.textContent = node.textContent.replace(/{{\S*}}/, val);
+		}
+
 		for (var i = 0; i < node.children.length; i++) {
 			setupChild(node.children[i], obj);
 		}
