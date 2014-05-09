@@ -1,33 +1,5 @@
 'use strict';
 
-/*
-
-** Array ***
-
-set
-push
-splice
-slice
-concat
-move
-clear
-addEventListener
-get
-getAll
-
-*** PAGINATION ***
-
-initPagination
-setPageIndex
-setPageSize
-nextPage
-prevPage
-isLastPage
-isFirstPage
-getPageIndex
-
-*/
-
 function HTMLArray (id, data) {
 
 	var element = document.getElementById(id),
