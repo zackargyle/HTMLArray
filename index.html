@@ -37,6 +37,15 @@
             {firstName: "Atticus", lastName: "Argyle"}
         ];
 
+        var data2 = [
+            {firstName: "Test", lastName: "Argyle"},
+            {firstName: "Test", lastName: "Argyle"},
+            {firstName: "Test", lastName: "Argyle"},
+            {firstName: "Test", lastName: "Argyle"},
+            {firstName: "Test", lastName: "Argyle"},
+            {firstName: "Test", lastName: "Argyle"}
+        ];
+
         var first = document.getElementById("firstName"),
             last  = document.getElementById("lastName"),
             index = document.getElementById("index"),
@@ -47,10 +56,18 @@
             prev  = document.getElementById("prev");
 
         var x = new HTMLArray("repeat", data);
-        console.log(x);
         x.initPagination(5, 0, true);
+
+        var selected = { node: null, index: -1 };
         x.addEventListener("click", function(e, data, index) {
-            alert("Hello from " + data.firstName + " " + data.lastName + " at index: " + index);
+            if (selected.index !== -1) {
+                x.swap(selected.index, index);
+                selected.node.classList.remove("selected");
+                selected.index = -1;
+            } else {
+                selected = {node: e.target, index: index};
+                e.target.classList.add("selected");
+            }
         });
 
         document.getElementById("add").addEventListener("click", function() {
