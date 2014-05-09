@@ -7,13 +7,13 @@ HTML Array Wrapper to seamlessly create repeated elements. Works great in connec
 
 First create a new object, passing in the id of an element you would like repeated. You can pass in an optional array as the second parameter. 
 
-    var x = new HTMLArray('listView', data);
+    var x = new HTMLArray(id, array);
     
-Your HTML should contain some elements that will map to your object fields. 
+Your HTML should contain some elements that will map to your object fields. Text content wrapped in {{ }} will be parsed to your objects field
 
-    <div id="listView">
-        <div x-class="class1" x-value="val1"></div>
-        <div x-class="class2" x-value="val2"></div>
+    <div id="list">
+        <div x-class="class1">{{val1}}</div>
+        <div x-class="class2">{{val2}}</div>
     </div>
     
 To build the list, use the 'set' method, it will remake the list with the new data.
@@ -37,19 +37,32 @@ This will create 2 elements that look like this.
 
 This html list can now be manipulated like an array. Available are
 
-    x.set(array);
-    x.push(obj);
-    x.splice(index, num, object);
-    x.slice(from, to);
+    // Return self
+    x.clear();
     x.concat(array);
     x.move(from, to);
-    x.clear();
+    x.push(obj);
+    x.set(array);
+    x.slice(from, to);
+    x.splice(index, num, object);
+
+    // Return value
     var obj = x.get(index);
     var array = x.getAll();
     
 All but get() and geAll() are chainable.
 
     x.push(obj).slice(2).move(4,1);
+
+You can simply add an event listener to each element in the list. You have the event, obj, and index of the object available to you with your function.
+
+    x.addEventListener("click", function(e, obj, index) {
+        console.log(e,data,index);
+    });
+
+The available HTML attributes are:
+
+    x-value, x-class, x-href, x-src
 
 There is also built in pagination available. This can be used by calling initPagination(). Default values are: page size of 10, start page of 0, and no refresh (this boolean determines weather the DOM should be updated).
 
@@ -64,7 +77,3 @@ The other pagination methods are:
     x.prevPage();
     x.isLastPage();
     x.isFirstPage();
-    
-The available HTML attributes are:
-
-    x-value, x-class, x-href, x-src
