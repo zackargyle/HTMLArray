@@ -124,7 +124,7 @@ function HTMLArray (id, data) {
 		return Object.prototype.toString.call(obj) === '[object Array]';
 	}
 
-	this.set = function(updatedData) {
+	this.__proto__.set = function(updatedData) {
 		if (!isArray(updatedData)) {
 			throw "HTMLArray.set requires an array";
 		}
@@ -138,14 +138,14 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.push = function(obj) {
+	this.__proto__.push = function(obj) {
 		if (!obj) throw "HTMLArray.push requires an object.";
 		insertNode(obj);
 		refresh();
 		return this_;
 	}
 
-	this.splice = function(index, num, obj) {
+	this.__proto__.splice = function(index, num, obj) {
 		index = parseInt(index), num = parseInt(num);
 		if (isNaN(index) || isNaN(num)) {
 			throw "HTMLArray.splice requires 2 paramters: index, num.";
@@ -162,7 +162,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.concat = function(array) {
+	this.__proto__.concat = function(array) {
 		if (!isArray(array)) {
 			throw "HTMLArray.concat requires an array";
 		}
@@ -175,7 +175,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.move = function(from, to) {
+	this.__proto__.move = function(from, to) {
 		from = parseInt(from), to = parseInt(to);
 		if (isNaN(from) || isNaN(to)) {
 			throw "HTMLArray.move requires 2 indexes: from, to.";
@@ -193,7 +193,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.slice = function(begin, end) {
+	this.__proto__.slice = function(begin, end) {
 		begin = parseInt(begin), end = parseInt(end);
 		if (isNaN(begin) || isNaN(end)) {
 			throw "HTMLArray.slice requires 2 indexes: begin, end.";
@@ -201,25 +201,41 @@ function HTMLArray (id, data) {
 		return this.set(data.slice(begin, end));
 	}
 
-	this.clear = function() {
+	this.__proto__.clear = function() {
 		if (paginationEnabled) {
 			pageIndex = 0;
 		}
 		return this.set([]);
 	}
 
-	this.get = function(index) {
+	this.__proto__.get = function(index) {
 		if (index === undefined) {
 			throw "HTMLArray.get requires an index";
 		}
 		return data[index];
 	}
 
-	this.getAll = function() {
+	this.__proto__.getAll = function() {
 		return data;
 	}
 
-	/* PAGINATION */
+	/* Add An Event Listener for each node */
+	function addListener(on, callback, index) {
+		var obj = data[index];
+		nodes[index].addEventListener(on, function(e) {
+			index = data.indexOf(obj);
+			callback(e, obj, index);
+		});
+	}
+
+	this.__proto__.addEventListener = function(on, callback) {
+		for (var i = 0; i < nodes.length; i++) {
+			addListener(on, callback, i);
+		}
+		return this;
+	}
+
+	/* Pagination */
 	function showCurrentPage(makeVisible) {
 		var	start = pageIndex * pageSize,
 				end   = start + pageSize;
@@ -229,7 +245,7 @@ function HTMLArray (id, data) {
 			nodes[i].style.display = makeVisible ? display : "none";
 	}
 
-	this.initPagination = function(pageSize_, pageIndex_, refresh_) {
+	this.__proto__.initPagination = function(pageSize_, pageIndex_, refresh_) {
 		paginationEnabled = true;
 		pageIndex = pageIndex_ || 0;
 		pageSize = pageSize_ || 10;
@@ -238,7 +254,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.setPageIndex = function(pageIndex_) {
+	this.__proto__.setPageIndex = function(pageIndex_) {
 		if (pageIndex !== pageIndex_) {
 			showCurrentPage(false);
 			pageIndex = pageIndex_
@@ -247,7 +263,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.setPageSize = function(pageSize_) {
+	this.__proto__.setPageSize = function(pageSize_) {
 		if (pageSize !== pageSize_) {
 			if (pageSize > pageSize_) {
 				showCurrentPage(false);
@@ -257,7 +273,7 @@ function HTMLArray (id, data) {
 		}
 	}
 
-	this.nextPage = function() {
+	this.__proto__.nextPage = function() {
 		if (!this.isLastPage()) {
 			showCurrentPage(false);
 			pageIndex++;
@@ -266,7 +282,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.prevPage = function() {
+	this.__proto__.prevPage = function() {
 		if (!this.isFirstPage()) {
 			showCurrentPage(false);
 			pageIndex--;
@@ -275,18 +291,18 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.isLastPage = function() {
+	this.__proto__.isLastPage = function() {
 		if (data.length > 0)
 			return pageIndex === Math.ceil(data.length / pageSize) - 1;
 		else
 			return true;
 	}
 
-	this.isFirstPage = function() {
+	this.__proto__.isFirstPage = function() {
 		return pageIndex === 0;
 	}
 
-	this.getPageIndex = function() {
+	this.__proto__.getPageIndex = function() {
 		return pageIndex;
 	}
 
