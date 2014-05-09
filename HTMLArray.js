@@ -11,6 +11,7 @@ slice
 concat
 move
 clear
+addEventListener
 get
 getAll
 
@@ -32,6 +33,7 @@ function HTMLArray (id, data) {
 	var element = document.getElementById(id),
 			parent  = element.parentNode,
 			display = element.style.display,
+			listeners = [],
 			pageIndex, pageSize,
 			firstPage, lastPage,
 			paginationEnabled = false,
@@ -105,6 +107,12 @@ function HTMLArray (id, data) {
 		parent.insertBefore(clone, nodes[index]);
 		nodes.splice(index, 0, clone);
 		data.splice(index, 0, obj);
+
+		if (listeners.length > 0) {
+			for (var i = 0; i < listeners.length; i++) {
+				addListener(listeners[i].on, listeners[i].callback, index);
+			}
+		}
 	}
 
 	function remove(index) {
@@ -124,7 +132,7 @@ function HTMLArray (id, data) {
 		return Object.prototype.toString.call(obj) === '[object Array]';
 	}
 
-	this.__proto__.set = function(updatedData) {
+	this.set = function(updatedData) {
 		if (!isArray(updatedData)) {
 			throw "HTMLArray.set requires an array";
 		}
@@ -138,14 +146,14 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.push = function(obj) {
+	this.push = function(obj) {
 		if (!obj) throw "HTMLArray.push requires an object.";
 		insertNode(obj);
 		refresh();
 		return this_;
 	}
 
-	this.__proto__.splice = function(index, num, obj) {
+	this.splice = function(index, num, obj) {
 		index = parseInt(index), num = parseInt(num);
 		if (isNaN(index) || isNaN(num)) {
 			throw "HTMLArray.splice requires 2 paramters: index, num.";
@@ -162,7 +170,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.concat = function(array) {
+	this.concat = function(array) {
 		if (!isArray(array)) {
 			throw "HTMLArray.concat requires an array";
 		}
@@ -175,7 +183,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.move = function(from, to) {
+	this.move = function(from, to) {
 		from = parseInt(from), to = parseInt(to);
 		if (isNaN(from) || isNaN(to)) {
 			throw "HTMLArray.move requires 2 indexes: from, to.";
@@ -193,7 +201,18 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.slice = function(begin, end) {
+	this.swap = function(index1, index2) {
+		index1 = parseInt(index1);
+		index2 = parseInt(index2);
+
+		var obj1  = data[index1],
+				obj2  = data[index2];
+
+		this.splice(index1, 1, obj2);
+		this.splice(index2, 1, obj1);
+	}
+
+	this.slice = function(begin, end) {
 		begin = parseInt(begin), end = parseInt(end);
 		if (isNaN(begin) || isNaN(end)) {
 			throw "HTMLArray.slice requires 2 indexes: begin, end.";
@@ -201,21 +220,21 @@ function HTMLArray (id, data) {
 		return this.set(data.slice(begin, end));
 	}
 
-	this.__proto__.clear = function() {
+	this.clear = function() {
 		if (paginationEnabled) {
 			pageIndex = 0;
 		}
 		return this.set([]);
 	}
 
-	this.__proto__.get = function(index) {
+	this.get = function(index) {
 		if (index === undefined) {
 			throw "HTMLArray.get requires an index";
 		}
 		return data[index];
 	}
 
-	this.__proto__.getAll = function() {
+	this.getAll = function() {
 		return data;
 	}
 
@@ -228,7 +247,8 @@ function HTMLArray (id, data) {
 		});
 	}
 
-	this.__proto__.addEventListener = function(on, callback) {
+	this.addEventListener = function(on, callback) {
+		listeners.push({on: on, callback: callback});
 		for (var i = 0; i < nodes.length; i++) {
 			addListener(on, callback, i);
 		}
@@ -245,7 +265,7 @@ function HTMLArray (id, data) {
 			nodes[i].style.display = makeVisible ? display : "none";
 	}
 
-	this.__proto__.initPagination = function(pageSize_, pageIndex_, refresh_) {
+	this.initPagination = function(pageSize_, pageIndex_, refresh_) {
 		paginationEnabled = true;
 		pageIndex = pageIndex_ || 0;
 		pageSize = pageSize_ || 10;
@@ -254,7 +274,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.setPageIndex = function(pageIndex_) {
+	this.setPageIndex = function(pageIndex_) {
 		if (pageIndex !== pageIndex_) {
 			showCurrentPage(false);
 			pageIndex = pageIndex_
@@ -263,7 +283,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.setPageSize = function(pageSize_) {
+	this.setPageSize = function(pageSize_) {
 		if (pageSize !== pageSize_) {
 			if (pageSize > pageSize_) {
 				showCurrentPage(false);
@@ -273,7 +293,7 @@ function HTMLArray (id, data) {
 		}
 	}
 
-	this.__proto__.nextPage = function() {
+	this.nextPage = function() {
 		if (!this.isLastPage()) {
 			showCurrentPage(false);
 			pageIndex++;
@@ -282,7 +302,7 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.prevPage = function() {
+	this.prevPage = function() {
 		if (!this.isFirstPage()) {
 			showCurrentPage(false);
 			pageIndex--;
@@ -291,18 +311,18 @@ function HTMLArray (id, data) {
 		return this_;
 	}
 
-	this.__proto__.isLastPage = function() {
+	this.isLastPage = function() {
 		if (data.length > 0)
 			return pageIndex === Math.ceil(data.length / pageSize) - 1;
 		else
 			return true;
 	}
 
-	this.__proto__.isFirstPage = function() {
+	this.isFirstPage = function() {
 		return pageIndex === 0;
 	}
 
-	this.__proto__.getPageIndex = function() {
+	this.getPageIndex = function() {
 		return pageIndex;
 	}
 
