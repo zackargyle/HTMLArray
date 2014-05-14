@@ -23,6 +23,11 @@ button:hover {
     cursor: pointer;
 }
 
+.red {
+    background-color: red;
+    opacity: .7;
+}
+
 input, button {
     box-sizing: border-box;
     border: none;

@@ -19,12 +19,12 @@
         <button id="clear">Clear</button><br>
 
         <div id="dataContainer">
-            <div id="repeat" class="data">{{firstName}} {{lastName}}</div>
+            <div id="repeat" class="data" x-class="class">{{firstName}} {{lastName}}</div>
         </div>
 
     </div>
 
-    <script src="HTMLArray.js"></script>
+    <script src="HTMLArray2.js"></script>
 
     <script>
     (function() {
@@ -37,15 +37,6 @@
             {firstName: "Atticus", lastName: "Argyle"}
         ];
 
-        var data2 = [
-            {firstName: "Test", lastName: "Argyle"},
-            {firstName: "Test", lastName: "Argyle"},
-            {firstName: "Test", lastName: "Argyle"},
-            {firstName: "Test", lastName: "Argyle"},
-            {firstName: "Test", lastName: "Argyle"},
-            {firstName: "Test", lastName: "Argyle"}
-        ];
-
         var first = document.getElementById("firstName"),
             last  = document.getElementById("lastName"),
             index = document.getElementById("index"),
@@ -55,13 +46,13 @@
             next  = document.getElementById("next"),
             prev  = document.getElementById("prev");
 
-        var x = new HTMLArray("repeat", data);
-        x.initPagination(5, 0, true);
+        var htmlArray = new HTMLArray("repeat", data);
+        htmlArray.initPagination(5, 0, true);
 
         var selected = { node: null, index: -1 };
-        x.addEventListener("click", function(e, data, index) {
+        htmlArray.addEventListener("click", function(e, data, index) {
             if (selected.index !== -1) {
-                x.swap(selected.index, index);
+                htmlArray.swap(selected.index, index);
                 selected.node.classList.remove("selected");
                 selected.index = -1;
             } else {
@@ -71,7 +62,7 @@
         });
 
         document.getElementById("add").addEventListener("click", function() {
-            x.push({
+            htmlArray.push({
                 firstName:first.value,
                 lastName:last.value
             });
@@ -79,7 +70,7 @@
         });
 
         document.getElementById("splice").addEventListener("click", function() {
-            x.splice(index.value, count.value, {
+            htmlArray.splice(index.value, count.value, {
                 firstName:first.value,
                 lastName:last.value
             });
@@ -87,27 +78,27 @@
         });
 
         document.getElementById("move").addEventListener("click", function() {
-            x.move(from.value, to.value);
+            htmlArray.move(from.value, to.value);
         });
 
         document.getElementById("clear").addEventListener("click", function() {
-            x.clear();
+            htmlArray.clear();
             refreshPaging();
         });
 
         next.addEventListener("click", function() {
-            x.nextPage();
+            htmlArray.nextPage();
             refreshPaging();
         });
 
         prev.addEventListener("click", function() {
-            x.prevPage();
+            htmlArray.prevPage();
             refreshPaging();
         });
 
         function refreshPaging() {
-            prev.className = x.isFirstPage() ? "disabled" : "";
-            next.className = x.isLastPage()  ? "disabled" : "";
+            prev.className = htmlArray.isFirstPage() ? "disabled" : "";
+            next.className = htmlArray.isLastPage()  ? "disabled" : "";
         }
         refreshPaging();
     })();
